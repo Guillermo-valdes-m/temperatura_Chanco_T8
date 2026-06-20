@@ -1,0 +1,143 @@
+
+<h2 class="sr-only">Gráfico de líneas con temperaturas máximas, mínimas y medias mensuales de Chanco, Maule, según datos históricos de Meteored.</h2>
+
+<div style="padding: 1rem 0;">
+  <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; font-size: 13px; color: var(--color-text-secondary); align-items: center;">
+    <span style="display: flex; align-items: center; gap: 6px;">
+      <span style="width: 28px; height: 3px; background: #D85A30; border-radius: 2px; display: inline-block;"></span>
+      Temperatura máxima
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px;">
+      <span style="width: 20px; height: 3px; background: #D85A30; border-radius: 2px; display: inline-block;"></span>
+      <span style="width: 4px; height: 3px; background: transparent; display: inline-block;"></span>
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px;">
+      <svg width="28" height="8" style="display:inline-block; vertical-align:middle;"><line x1="0" y1="4" x2="10" y2="4" stroke="#D85A30" stroke-width="2.5"/><line x1="14" y1="4" x2="28" y2="4" stroke="#D85A30" stroke-width="2.5" stroke-dasharray="4,4"/></svg>
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px; margin-left: -8px;">
+      <svg width="24" height="8" style="display:inline-block; vertical-align:middle;"><line x1="0" y1="4" x2="24" y2="4" stroke="#D85A30" stroke-width="2.5"/></svg>
+      <span style="font-size: 12px; color: var(--color-text-secondary);">Máxima</span>
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px;">
+      <svg width="24" height="8" style="display:inline-block; vertical-align:middle;"><line x1="0" y1="4" x2="24" y2="4" stroke="#1D9E75" stroke-width="2.5"/></svg>
+      <span style="font-size: 12px; color: var(--color-text-secondary);">Media</span>
+    </span>
+    <span style="display: flex; align-items: center; gap: 6px;">
+      <svg width="24" height="8" style="display:inline-block; vertical-align:middle;"><line x1="0" y1="4" x2="24" y2="4" stroke="#378ADD" stroke-width="2.5"/></svg>
+      <span style="font-size: 12px; color: var(--color-text-secondary);">Mínima</span>
+    </span>
+  </div>
+
+  <div style="position: relative; width: 100%; height: 340px;">
+    <canvas id="tempChart" role="img" aria-label="Gráfico de líneas con temperaturas máximas, mínimas y medias mensuales históricas de Chanco, Maule. Los meses de verano (enero-marzo) son los más cálidos con máximas sobre 25°C, mientras que julio es el más frío con mínimas de 5°C.">Datos históricos de temperatura en Chanco, Maule: máximas entre 13°C (julio) y 26°C (enero), mínimas entre 5°C (julio) y 13°C (enero), medias entre 9°C (julio) y 19°C (enero-febrero).</canvas>
+  </div>
+
+  <p style="font-size: 12px; color: var(--color-text-tertiary); margin-top: 12px; text-align: right;">
+    Fuente: datos históricos climáticos · <a href="https://www.meteored.cl/tiempo-en_Chanco-America+Sur-Chile-Maule--1-17973.html" style="color: var(--color-text-info);">meteored.cl</a>
+  </p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+const maximas  = [26, 26, 23, 20, 17, 14, 13, 14, 16, 19, 22, 25];
+const medias   = [19, 19, 17, 14, 11, 10,  9, 10, 12, 14, 16, 18];
+const minimas  = [13, 12, 11,  9,  7,  7,  5,  6,  7,  9, 10, 12];
+
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const gridColor  = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
+const tickColor  = isDark ? '#9a9894' : '#888780';
+const labelColor = isDark ? '#d3d1c7' : '#5f5e5a';
+
+new Chart(document.getElementById('tempChart'), {
+  type: 'line',
+  data: {
+    labels: meses,
+    datasets: [
+      {
+        label: 'Máxima',
+        data: maximas,
+        borderColor: '#D85A30',
+        backgroundColor: 'rgba(216,90,48,0.08)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#D85A30',
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0.35,
+        fill: false
+      },
+      {
+        label: 'Media',
+        data: medias,
+        borderColor: '#1D9E75',
+        backgroundColor: 'rgba(29,158,117,0.08)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#1D9E75',
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0.35,
+        fill: false,
+        borderDash: []
+      },
+      {
+        label: 'Mínima',
+        data: minimas,
+        borderColor: '#378ADD',
+        backgroundColor: 'rgba(55,138,221,0.08)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#378ADD',
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0.35,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: isDark ? '#2c2c2a' : '#fff',
+        borderColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)',
+        borderWidth: 1,
+        titleColor: labelColor,
+        bodyColor: labelColor,
+        padding: 12,
+        callbacks: {
+          label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + ' °C'
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: gridColor },
+        ticks: {
+          color: tickColor,
+          font: { size: 12 },
+          autoSkip: false
+        },
+        border: { color: gridColor }
+      },
+      y: {
+        min: 0,
+        max: 32,
+        grid: { color: gridColor },
+        ticks: {
+          color: tickColor,
+          font: { size: 12 },
+          stepSize: 4,
+          callback: v => v + ' °C'
+        },
+        border: { color: gridColor }
+      }
+    }
+  }
+});
+</script>
